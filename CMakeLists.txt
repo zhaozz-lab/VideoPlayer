@@ -7,7 +7,7 @@ get_filename_component(PRODUCT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
 project(${PRODUCT_NAME})
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -22,6 +22,7 @@ set(CMAKE_AUTOUIC ON)
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/win64)
 #set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/path)
 
+message("current platform: Linux ")
 if(UNIX)
 
     message("current platform: Linux ")
@@ -59,12 +60,12 @@ elseif(WIN32)
     # endforeach()
 
     if(CMAKE_CL_64)    #CMAKE的内建变量，如果是true，就说明编译器的64位的，自然可以编译64bit的程序
-        list(APPEND CMAKE_PREFIX_PATH C:/Qt/Qt5.13.2/5.13.2/msvc2017_64)
-        list(APPEND CMAKE_PREFIX_PATH C:/Qt/6.7.3/msvc2019_64)
+        # list(APPEND CMAKE_PREFIX_PATH "D:/Qt/6.9.1/msvc2022_64")
+        list(APPEND CMAKE_PREFIX_PATH "D:/Qt/6.9.1/android_arm64_v8a")
         set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/win64)
     else()
         set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/win32)
-        list(APPEND CMAKE_PREFIX_PATH C:/Qt/Qt5.13.2/5.13.2/msvc2017)
+        list(APPEND CMAKE_PREFIX_PATH D:/Qt/6.9.1/android_arm64_v8a)
     endif()
 
 else()
@@ -176,10 +177,11 @@ if (WIN32)
 endif()
 
 if (FOUND_QT6)
-    target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::OpenGL Qt6::OpenGLWidgets Qt6::Core5Compat)
+    target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::OpenGL Qt6::OpenGLWidgets)
 elseif (FOUND_QT5)
     target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Widgets Qt5::Network Qt5::Concurrent)
 endif()
+
 
 
 # message(${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

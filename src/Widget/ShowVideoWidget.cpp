@@ -656,44 +656,44 @@ void ShowVideoWidget::resizeGL(int window_W, int window_H)
         {
             m_pShaderProgram->bind();
 
-            //加载y数据纹理
-            //激活纹理单元GL_TEXTURE0
-            glActiveTexture(GL_TEXTURE0);
-            //使用来自y数据生成纹理
-            glBindTexture(GL_TEXTURE_2D, id_y);
-            //使用内存中m_pBufYuv420p数据创建真正的y数据纹理
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_nVideoW, m_nVideoH, 0, GL_RED, GL_UNSIGNED_BYTE, m_pBufYuv420p);
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            //加载u数据纹理
-            glActiveTexture(GL_TEXTURE1);//激活纹理单元GL_TEXTURE1
-            glBindTexture(GL_TEXTURE_2D, id_u);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_nVideoW/2, m_nVideoH/2, 0, GL_RED, GL_UNSIGNED_BYTE, (char*)m_pBufYuv420p+m_nVideoW*m_nVideoH);
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            //加载v数据纹理
-            glActiveTexture(GL_TEXTURE2);//激活纹理单元GL_TEXTURE2
-            glBindTexture(GL_TEXTURE_2D, id_v);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_nVideoW/2, m_nVideoH/2, 0, GL_RED, GL_UNSIGNED_BYTE, (char*)m_pBufYuv420p+m_nVideoW*m_nVideoH*5/4);
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            //指定y纹理要使用新值 只能用0,1,2等表示纹理单元的索引，这是opengl不人性化的地方
-            //0对应纹理单元GL_TEXTURE0 1对应纹理单元GL_TEXTURE1 2对应纹理的单元
-            glUniform1i(textureUniformY, 0);
-            //指定u纹理要使用新值
-            glUniform1i(textureUniformU, 1);
-            //指定v纹理要使用新值
-            glUniform1i(textureUniformV, 2);
-            //使用顶点数组方式绘制图形
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            // //加载y数据纹理
+            // //激活纹理单元GL_TEXTURE0
+            // glActiveTexture(GL_TEXTURE0);
+            // //使用来自y数据生成纹理
+            // glBindTexture(GL_TEXTURE_2D, id_y);
+            // //使用内存中m_pBufYuv420p数据创建真正的y数据纹理
+            // glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_nVideoW, m_nVideoH, 0, GL_RED, GL_UNSIGNED_BYTE, m_pBufYuv420p);
+            // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+            // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            // //加载u数据纹理
+            // glActiveTexture(GL_TEXTURE1);//激活纹理单元GL_TEXTURE1
+            // glBindTexture(GL_TEXTURE_2D, id_u);
+            // glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_nVideoW/2, m_nVideoH/2, 0, GL_RED, GL_UNSIGNED_BYTE, (char*)m_pBufYuv420p+m_nVideoW*m_nVideoH);
+            // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+            // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            // //加载v数据纹理
+            // glActiveTexture(GL_TEXTURE2);//激活纹理单元GL_TEXTURE2
+            // glBindTexture(GL_TEXTURE_2D, id_v);
+            // glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, m_nVideoW/2, m_nVideoH/2, 0, GL_RED, GL_UNSIGNED_BYTE, (char*)m_pBufYuv420p+m_nVideoW*m_nVideoH*5/4);
+            // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+            // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            // //指定y纹理要使用新值 只能用0,1,2等表示纹理单元的索引，这是opengl不人性化的地方
+            // //0对应纹理单元GL_TEXTURE0 1对应纹理单元GL_TEXTURE1 2对应纹理的单元
+            // glUniform1i(textureUniformY, 0);
+            // //指定u纹理要使用新值
+            // glUniform1i(textureUniformU, 1);
+            // //指定v纹理要使用新值
+            // glUniform1i(textureUniformV, 2);
+            // //使用顶点数组方式绘制图形
+            // glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-            m_pShaderProgram->release();
+            // m_pShaderProgram->release();
 
         }
     }
