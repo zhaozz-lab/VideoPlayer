@@ -5,9 +5,12 @@ set(FFMPEG_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE INTERNAL "Test Str"
 
 set(FFMPEG_BRANCH_NAME "V4.3.1")
 set(SDL2_BRANCH_NAME   "V2.0.2")
-
-if(UNIX)
-    message("current platform: Linux ")
+if(ANDROID)
+    message("current platform: android ")
+    set(FFMPEG_BRANCH_NAME "V4.3.1-linux")
+    set(SDL2_BRANCH_NAME   "V2.0.12-linux")
+elseif(UNIX)
+    message("current platform: Linux 13 ")
     set(FFMPEG_BRANCH_NAME "V4.3.1-linux")
     set(SDL2_BRANCH_NAME   "V2.0.12-linux")
 elseif(WIN32)
@@ -58,3 +61,6 @@ set(LIB_INCLUDE
 set(LIB_FILES  
     ${FFMPEG_LIB} ${SDL2_LIB}
     CACHE INTERNAL "Test Str")
+
+message("FFMPEG INCLUDE",${FFMPEG_INCLUDE})
+message("FFMPEG lIB",${FFMPEG_LIB})

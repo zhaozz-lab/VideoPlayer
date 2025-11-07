@@ -7,7 +7,11 @@ get_filename_component(PRODUCT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
 project(${PRODUCT_NAME})
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17) # Or 20, depending on your needs and NDK version
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(ANDROID_STL c++_shared) 
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -21,49 +25,22 @@ set(CMAKE_AUTOUIC ON)
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/library)
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/win64)
 #set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/path)
-
-message("current platform: Linux ")
-if(UNIX)
-
-    message("current platform: Linux ")
-
+if(ANDROID)
+    message("current platform: android ")
+    list(APPEND CMAKE_PREFIX_PATH D:/Qt/6.9.1/android_arm64_v8a)
+elseif(UNIX)
     set(CMAKE_PREFIX_PATH "/opt/Qt/Qt5.13.2")
     set(QT_QMAKE_EXECUTABLE "/opt/Qt/Qt5.13.2/bin/qmake")
 
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/linux)
-
 elseif(WIN32)
-
     message("current platform: Windows ")
-
-    # #指定Qt安装目录
-    # set(QT_DIR_ROOT 
-    #         C:/Qt/Qt5.13.2/5.13.2
-    #         D:/Qt/Qt5.13.2/5.13.2)
-    
-    # if(CMAKE_CL_64)    #CMAKE的内建变量，如果是true，就说明编译器的64位的，自然可以编译64bit的程序
-    #     set(QT_DIR_NAME msvc2017_64)
-    #     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/win64)
-    #     # set(CMAKE_PREFIX_PATH ${QT_DIR_ROOT}/msvc2017_64)
-    #     # list(APPEND CMAKE_PREFIX_PATH ${QT_DIR_ROOT}/msvc2017_64)
-    # else()
-    #     set(QT_DIR_NAME msvc2017)
-    #     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/win32)
-    # endif()
-
-    # foreach(item ${QT_DIR_ROOT})
-    #     set(QT_DIR_PATH ${item}/${QT_DIR_NAME})
-    #     message(STATUS "item is ${QT_DIR_PATH}")
-    #     if(EXISTS ${QT_DIR_PATH})
-    #         list(APPEND CMAKE_PREFIX_PATH ${QT_DIR_PATH})
-    #     endif()
-    # endforeach()
-
     if(CMAKE_CL_64)    #CMAKE的内建变量，如果是true，就说明编译器的64位的，自然可以编译64bit的程序
         # list(APPEND CMAKE_PREFIX_PATH "D:/Qt/6.9.1/msvc2022_64")
         list(APPEND CMAKE_PREFIX_PATH "D:/Qt/6.9.1/android_arm64_v8a")
         set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/win64)
     else()
+       
         set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/win32)
         list(APPEND CMAKE_PREFIX_PATH D:/Qt/6.9.1/android_arm64_v8a)
     endif()
@@ -74,25 +51,13 @@ else()
 
 endif()
 
-
-##为每个模块提供*.cmake文件搜索路径
-#set(Qt5_DIR "${CMAKE_PREFIX_PATH}/lib/cmake/Qt5")
-#set(Qt5Widgets_DIR "${CMAKE_PREFIX_PATH}/lib/cmake/Qt5Widgets")
-#set(Qt5Network_DIR "${CMAKE_PREFIX_PATH}/lib/cmake/Qt5Network")
-#set(Qt5LinguistTools_DIR "${CMAKE_PREFIX_PATH}/lib/cmake/Qt5LinguistTools")
-#然后查找
-#find_package(Qt5 COMPONENTS Widgets Network LinguistTools)
-#find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Network REQUIRED)
-# find_package(Qt5 COMPONENTS Widgets Network WebSockets REQUIRED)
-
-
 # find_package(<库名> <版本号> EXACT COMPONENTS <组件名1> ... <组件名n> REQUIRED)
-find_package(Qt5 COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets Network Concurrent)
+# find_package(Qt5 COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets Network Concurrent)
 find_package(Qt6 COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets Network Concurrent Core5Compat)
 # find_package(Qt6 REQUIRED COMPONENTS Core Gui OpenGL OpenGLWidgets Widgets Network Concurrent )
 
-message("Qt5_VERSION:"${Qt5_VERSION})
-message("Qt6_VERSION:"${Qt6_VERSION})
+# message("Qt5_VERSION:"${Qt5_VERSION})
+message("=====Qt6_VERSION:"${Qt6_VERSION})
 
 set(FOUND_QT5 FALSE)
 set(FOUND_QT6 FALSE)
@@ -131,8 +96,9 @@ endif()
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/library)
 # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/win64)
 #set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/path)
-
+message("start")
 add_definitions(-DUNICODE)
+message("end")
 
 
 if(MSVC)
@@ -177,27 +143,8 @@ if (WIN32)
 endif()
 
 if (FOUND_QT6)
-    target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::OpenGL Qt6::OpenGLWidgets)
+    target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Widgets Qt6::Network Qt6::Concurrent Qt6::OpenGL Qt6::OpenGLWidgets c++)
 elseif (FOUND_QT5)
     target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Widgets Qt5::Network Qt5::Concurrent)
 endif()
-
-
-
-# message(${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-
-# #编译成功后，执行自定义命令
-# #拷贝有可能会升级的lib文件到system/lib
-# add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#     # COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/module/VideoPlayer/lib/ffmpeg/bin/win64/* ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/
-#     # COMMAND ${CMAKE_COMMAND} -E copy module/VideoPlayer/lib/ffmpeg/bin/win64/avcodec.lib bin/win64
-#     COMMAND copy module/VideoPlayer/lib/ffmpeg/bin/win64/* bin/win64/
-#     )
-
-
-# #编译成功后，执行自定义命令
-# #拷贝dll到bin目录下
-# add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/copy_dll.bat
-#     )
-
+message("build end")
