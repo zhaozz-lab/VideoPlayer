@@ -1,0 +1,2 @@
+:-1: error: ld.lld: error: D:/github/VideoPlayer/module/VideoPlayer/lib/ffmpeg/lib/libavformat.so is incompatible with armelf_linux_eabi
+:-1: error: ld.lld: error: D:/github/VideoPlayer/module/VideoPlayer/lib/ffmpeg/lib/libc++_shared.so is incompatible with armelf_linux_eabi
